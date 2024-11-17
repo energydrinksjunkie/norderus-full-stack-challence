@@ -1,11 +1,21 @@
+import pygame
 from grid_parser import fetch_and_parse_grid
-from island_finder import find_all_islands
+from visualizer import render_grid, initialize_screen
 
 def main():
     grid = fetch_and_parse_grid()
-    islands = find_all_islands(grid)
-    for island_id, (avg_height, coordinates) in islands.items():
-        print(f"island id: {island_id}, avg height: {avg_height:.2f}, coords: {coordinates}")
+
+    screen = initialize_screen()
+
+    render_grid(screen, grid)
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+    pygame.quit()
 
 if __name__ == "__main__":
     main()
