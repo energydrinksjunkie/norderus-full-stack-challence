@@ -24,12 +24,15 @@ def render_grid(screen, grid):
             height = grid[row][col]
             color = height_to_color(height)
             pygame.draw.rect(screen, color, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
-    
     pygame.display.update()
+
+def display_message(screen, message, font, color, position):
+    text = font.render(message, True, color)
+    screen.blit(text, position)
 
 def initialize_screen():
     pygame.init()
-    width, height = 600, 600 
+    width, height = 600, 600
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption('Nordeus Game')
     return screen
