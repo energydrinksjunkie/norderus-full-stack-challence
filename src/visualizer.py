@@ -14,7 +14,7 @@ COLOR_RANGES = {
 }
 
 def height_to_color(height):
-    for key, range_data in COLOR_RANGES.items():
+    for _, range_data in COLOR_RANGES.items():
         if range_data["min"] <= height <= range_data["max"]:
             return range_data["color"]
 
@@ -24,7 +24,6 @@ def render_grid(screen, grid):
             height = grid[row][col]
             color = height_to_color(height)
             pygame.draw.rect(screen, color, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
-    pygame.display.update()
 
 def display_message(screen, message, font, color, position):
     text = font.render(message, True, color)
