@@ -1,0 +1,19 @@
+Description of bugs that came up - how you noticed and fixed them:
+- Redraw Issue: Initially, I noticed that the game was unnecessarily calling the redraw function on every frame, even when no events occurred. This led to performance issues and redundant screen updates. To fix this, I added a check to only call redraw when there's a change in the game state, like a new click or a level change.
+
+Ways you would test the projects of other contestants (inputs, actions you would do, etc.):
+- Backend Testing: To test the backend, I would write a tester that feeds different grid data to the island-finding function and verifies the output against expected results. I would also test edge cases like grids with no islands, grids where all cells are islands, and large grids to check performance.
+- Frontend Testing: For frontend testing, I would focus on simulating user clicks and verifying that the correct islands are clicked and the UI updates properly (e.g., accuracy calculation, message display, etc.). I’d also test for responsiveness and check that no bugs appear when switching levels or starting a new game.
+
+Improvements/features you would make if you had a magic wand (able to do anything you wish for):
+- Magic Wand Features:
+  - AI Opponent: I would introduce an AI opponent that tries to find the highest island while also trying to block the player’s progress.
+  - Dynamic Grid Generation: Add dynamically generated grids of different sizes and complexities, where the difficulty increases as you progress, with random island heights and shapes.
+  - Power-ups/Abilities: I’d introduce power-ups such as hints (showing nearby island coordinates), island-shrinking (making it harder to click), or extra attempts for difficult levels.
+  - Multiplayer Mode: Enable multiplayer functionality, where two players can compete to click the correct islands at the same time.
+  - Map Navigation: Add an option to zoom in and out of the map, especially for larger grids, to improve gameplay visibility and navigation.
+
+Factors that could affect your solution (e.g., map size, number of lives…):
+- Map Size: Larger maps might affect performance, especially in terms of DFS speed. While DFS is efficient for smaller grids, huge grids could cause performance drops. To mitigate this, I would optimize the DFS approach or consider alternate algorithms for extremely large grids.
+- Number of Lives: If the number of lives is greater than or equal to the number of islands, the game would be too easy. It would be better to have fewer lives than islands, which increases the challenge of the game and makes it more interesting.
+- Grid Complexity: More complex island structures (irregularly shaped, more islands) could increase the challenge and would require additional logic to handle edge cases, such as islands near the edge of the grid or surrounded by water.
