@@ -28,7 +28,6 @@ def main():
     game_over = False
     incorrect_message = False
     try_again_message = False
-    incorrect_timer = None
     success_message = False
     needs_redraw = True
 
@@ -42,18 +41,13 @@ def main():
 
             if game_over:
                 if success_message:
-                    display_message(screen, f"Success! Highest avg height: {max_avg_height:.2f}.", font, (0, 255, 0), (10, 50))
+                    display_message(screen, "Success!", font, (0, 255, 0), (10, 50))
                 else:
                     display_message(screen, "Game Over: You Lost!", font, (255, 0, 0), (10, 50))
                 display_message(screen, "Press Q to quit or P to try again.", font, (255, 255, 255), (10, 90))
 
             pygame.display.update()
             needs_redraw = False
-
-        if incorrect_timer and pygame.time.get_ticks() > incorrect_timer:
-            incorrect_message = False
-            incorrect_timer = None
-            needs_redraw = True
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -69,17 +63,18 @@ def main():
                         if island_id == island_with_max_height:
                             game_over = True
                             success_message = True
+                            incorrect_message = False
                             try_again_message = True
                             needs_redraw = True
                         else:
                             tries -= 1
                             if tries > 0:
                                 incorrect_message = True
-                                incorrect_timer = pygame.time.get_ticks() + 1500
                                 needs_redraw = True
                             else:
                                 game_over = True
                                 success_message = False
+                                incorrect_message = False
                                 try_again_message = True
                                 needs_redraw = True
 
@@ -92,7 +87,6 @@ def main():
                         game_over = False
                         incorrect_message = False
                         try_again_message = False
-                        incorrect_timer = None
                         success_message = False
                         needs_redraw = True
 
