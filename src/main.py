@@ -34,13 +34,14 @@ def main():
     game_over = False
     lost_game = False
     clicked_islands = set()
+    incorrect_islands = set()
     needs_redraw = True
     message = ""
 
     while True:
         if needs_redraw:
             screen.fill((0, 0, 0))
-            render_grid(screen, grid)
+            render_grid(screen, grid, islands, incorrect_islands)
             display_message(screen, f"Level: {level + 1}", font, (255, 255, 255), (10, 10))
             display_message(screen, f"Attempts left: {attempts}", font, (255, 255, 255), (10, 50))
             accuracy = (correct_guesses / valid_clicks) * 100 if valid_clicks > 0 else 0
@@ -77,6 +78,7 @@ def main():
                                 game_over = True
                             else:
                                 attempts -= 1
+                                incorrect_islands.add(island_id)
                                 message = "Incorrect! Try again." if attempts > 0 else "Game Over: You Lost!"
                                 if attempts == 0:
                                     lost_game = True
@@ -94,6 +96,7 @@ def main():
                     level += 1
                     attempts = TRIES
                     clicked_islands.clear()
+                    incorrect_islands.clear()
                     game_over = False
                     lost_game = False
                     message = ""
@@ -106,6 +109,7 @@ def main():
                     valid_clicks = 0
                     correct_guesses = 0
                     clicked_islands.clear()
+                    incorrect_islands.clear()
                     game_over = False
                     lost_game = False
                     message = ""
