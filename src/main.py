@@ -25,14 +25,15 @@ def main():
     font = pygame.font.SysFont(None, 40)
     screen = initialize_screen()
 
-    # Početno stanje igre
     grid, islands, island_with_max_height, _ = start_new_game()
     level = 0
     total_clicks = 0
+    valid_clicks = 0
     correct_guesses = 0
     attempts = TRIES
     game_over = False
     lost_game = False
+    clicked_islands = set()
     needs_redraw = True
     message = ""
 
@@ -42,10 +43,10 @@ def main():
             render_grid(screen, grid)
             display_message(screen, f"Level: {level + 1}", font, (255, 255, 255), (10, 10))
             display_message(screen, f"Attempts left: {attempts}", font, (255, 255, 255), (10, 50))
-            accuracy = (correct_guesses / total_clicks) * 100 if total_clicks > 0 else 0
+            accuracy = (correct_guesses / valid_clicks) * 100 if valid_clicks > 0 else 0
             display_message(screen, f"Accuracy: {accuracy:.2f}%", font, (255, 255, 255), (10, 90))
             if message:
-                message_color = (255, 0, 0) if "Incorrect" in message or lost_game else (0, 255, 0)
+                message_color = (255, 0, 0) if "Incorrect" in message or "already clicked" in message or lost_game else (0, 255, 0)
                 display_message(screen, message, font, message_color, (10, 130))
             if game_over and lost_game:
                 display_message(screen, "Press Q to quit or P to play again.", font, (255, 255, 255), (10, 180))
@@ -62,18 +63,26 @@ def main():
                     x, y = pygame.mouse.get_pos()
                     col, row = x // 20, y // 20
                     island_id, _ = find_island_at_position(col, row, islands)
-                    total_clicks += 1
+
                     if island_id:
-                        if island_id == island_with_max_height:
-                            correct_guesses += 1
-                            message = "Success! Press N for next level."
-                            game_over = True
+                        if island_id in clicked_islands:
+                            message = "You already clicked this island!"
                         else:
-                            attempts -= 1
-                            message = "Incorrect! Try again." if attempts > 0 else "Game Over: You Lost!"
-                            if attempts == 0:
-                                lost_game = True
-                            game_over = attempts == 0
+                            clicked_islands.add(island_id)
+                            valid_clicks += 1
+                            total_clicks += 1
+                            if island_id == island_with_max_height:
+                                correct_guesses += 1
+                                message = "Success! Press N for next level."
+                                game_over = True
+                            else:
+                                attempts -= 1
+                                message = "Incorrect! Try again." if attempts > 0 else "Game Over: You Lost!"
+                                if attempts == 0:
+                                    lost_game = True
+                                    game_over = True
+                    else:
+                        total_clicks += 1
                     needs_redraw = True
 
             if game_over and event.type == pygame.KEYDOWN:
@@ -84,6 +93,7 @@ def main():
                     grid, islands, island_with_max_height, _ = start_new_game()
                     level += 1
                     attempts = TRIES
+                    clicked_islands.clear()
                     game_over = False
                     lost_game = False
                     message = ""
@@ -93,7 +103,9 @@ def main():
                     level = 0
                     attempts = TRIES
                     total_clicks = 0
+                    valid_clicks = 0
                     correct_guesses = 0
+                    clicked_islands.clear()
                     game_over = False
                     lost_game = False
                     message = ""
